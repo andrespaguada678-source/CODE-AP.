@@ -52,50 +52,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     h1 { font-size: 2.8rem; margin: 0; color: var(--accent); }
     .subtitle { color: #94a3b8; margin-top: 10px; font-size: 1.1rem; }
 
-    /* Buscador compacto */
-    <div class="color-container">
-    <h2>🎨 Cambia el ambiente</h2>
-    <input type="color" id="colorPicker" value="#1a1a1a">
-    <p>Toca para ver la magia en vivo</p>
-</div>
-
-<style>
-/* Diseño bonito para el contenedor */
-.color-container {
-    text-align: center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    margin: 20px auto;
-    max-width: 300px;
-    color: white;
-    font-family: sans-serif;
-}
-
-#colorPicker {
-    width: 80px;
-    height: 80px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    background: none;
-    transition: transform 0.2s;
-}
-
-#colorPicker:hover {
-    transform: scale(1.1);
-}
-</style>
-
-<script>
-// La línea mágica de JavaScript
-document.getElementById('colorPicker').addEventListener('input', (e) => {
-    document.body.style.backgroundColor = e.target.value;
-});
-</script>
-    
+    /* Buscador compacto */ 
     .search-container {
         max-width: 600px;
         margin: -25px auto 40px;
