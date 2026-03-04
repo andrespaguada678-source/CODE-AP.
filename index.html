@@ -470,6 +470,219 @@ window.addEventListener("resize",()=>{
 </body>
 </html>`
 }
+            titulo: "Galaxia Ultra Realista (Canvas JS)",
+    lenguaje: "html",
+    color: "#0f172a", // Color oscuro como el espacio
+    codigo: `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER-GEN | CODE AP PRO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon: #00ff41;
+            --dark-neon: #003b11;
+            --bg: #000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--neon);
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* FONDO MATRIX */
+        #matrixCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+
+        .main-frame {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--neon);
+            padding: 40px;
+            box-shadow: 0 0 50px var(--dark-neon);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* CABECERA SISTEMA */
+        .system-header {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--dark-neon);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px var(--neon);
+        }
+
+        /* PANTALLA DE RESULTADO */
+        .display-container {
+            background: rgba(0, 59, 17, 0.2);
+            border: 1px inset var(--neon);
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #passOut {
+            font-size: 2.2rem;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px var(--neon);
+        }
+
+        /* BOTÓN DE ACCIÓN */
+        .btn-gen {
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--neon);
+            color: var(--neon);
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gen:hover {
+            background: var(--neon);
+            color: black;
+            box-shadow: 0 0 40px var(--neon);
+        }
+
+        .status-bar {
+            margin-top: 25px;
+            font-size: 0.6rem;
+            color: var(--dark-neon);
+        }
+
+        /* EFECTO DE ESCANEO */
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: var(--neon);
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-shadow: 0 0 10px var(--neon);
+            animation: scan 3s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="main-frame">
+        <div class="scanline"></div>
+        
+        <div class="system-header">
+            <span>Terminal: AP-V4</span>
+            <span>Status: Online</span>
+        </div>
+
+        <h1>CYBER-VAULT PRO</h1>
+
+        <div class="display-container">
+            <div id="passOut">_READY_</div>
+        </div>
+
+        <button class="btn-gen" onclick="hackGenerate()">
+            <i class="fa-solid fa-skull-crossbones"></i> GENERATE KEY
+        </button>
+
+        <div class="status-bar">
+            ENCRYPTION: AES-256 | SOURCE: CODE_AP_HUB
+        </div>
+    </div>
+
+    <script>
+        // --- EFECTO MATRIX DE FONDO ---
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 30);
+
+        // --- LÓGICA DE GENERACIÓN ---
+        function hackGenerate() {
+            const display = document.getElementById('passOut');
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            let iterations = 0;
+            
+            const hackEffect = setInterval(() => {
+                // Genera texto aleatorio mientras "carga"
+                display.innerText = Math.random().toString(36).substring(2, 10).toUpperCase();
+                display.style.color = "#fff"; // Brillo blanco durante el hack
+                
+                iterations++;
+                if (iterations > 20) {
+                    clearInterval(hackEffect);
+                    let finalPass = "";
+                    for(let i=0; i<8; i++) {
+                        finalPass += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    display.innerText = finalPass;
+                    display.style.color = "#00ff41"; // Vuelve al verde neón
+                }
+            }, 60);
+        }
+    </script>
+</body>
+</html>
             // Cuando quieras agregar uno nuevo, copias y pegas un bloque de estos aquí arriba.
         ];
 
@@ -600,6 +813,7 @@ window.addEventListener("resize",()=>{
 </body>
 
 </html>
+
 
 
 
