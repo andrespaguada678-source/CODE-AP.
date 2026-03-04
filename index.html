@@ -528,7 +528,51 @@ window.addEventListener("resize",()=>{
     <\/script>
 </body>
 </html>`
+            },
+            {
+    titulo: "Organizador de Archivos Pro (Node.js)",
+    lenguaje: "javascript",
+    color: "#026e00",
+    codigo: `const fs = require('fs');
+const path = require('path');
+
+// Usamos esta forma para que detecte la carpeta automáticamente sin errores de ruta
+const carpetaOrigen = __dirname; 
+
+const extensiones = {
+    'Instaladores': ['.exe', '.msi'],
+    'Documentos': ['.pdf', '.docx', '.txt'],
+    'Imagenes': ['.jpg', '.png', '.jpeg', '.webp'],
+    'Codigo': ['.js', '.html', '.css', '.py']
+};
+
+console.log("🚀 Iniciando organización...");
+
+try {
+    const archivos = fs.readdirSync(carpetaOrigen);
+    
+    archivos.forEach(archivo => {
+        if (archivo === 'app.js') return; // Cambia esto si tu archivo se llama distinto
+
+        const ext = path.extname(archivo).toLowerCase();
+        for (const [carpeta, exts] of Object.entries(extensiones)) {
+            if (exts.includes(ext)) {
+                if (!fs.existsSync(path.join(carpetaOrigen, carpeta))) {
+                    fs.mkdirSync(path.join(carpetaOrigen, carpeta));
+                }
+                
+                const rutaVieja = path.join(carpetaOrigen, archivo);
+                const rutaNueva = path.join(carpetaOrigen, carpeta, archivo);
+                
+                fs.renameSync(rutaVieja, rutaNueva);
+                console.log(\`✅ Movido: \${archivo}\`);
             }
+        }
+    });
+    console.log("✨ ¡Carpeta limpia!");
+} catch (e) {
+    console.log("❌ Error de permisos: Intenta cerrar la carpeta en el explorador de Windows.");
+}`
             // Cuando quieras agregar uno nuevo, copias y pegas un bloque de estos aquí arriba.
         ];
 
@@ -659,6 +703,7 @@ window.addEventListener("resize",()=>{
 </body>
 
 </html>
+
 
 
 
