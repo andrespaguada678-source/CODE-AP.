@@ -802,6 +802,148 @@ try {
 </body>
 </html>`
     },
+            {
+    titulo: "NUEVO PROYECTO",
+    lenguaje: "javascript",
+    color: "#f1e05a",
+    codigo: `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>GAIA CORE | SOS TECH</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Share Tech Mono', monospace; cursor: none; }
+        canvas { position: absolute; top: 0; left: 0; filter: contrast(1.2) brightness(1.1); }
+        #ui {
+            position: absolute; width: 100%; height: 100%; pointer-events: none;
+            display: flex; flex-direction: column; justify-content: space-between; padding: 40px; box-sizing: border-box;
+        }
+        .tag { color: #0ff; letter-spacing: 5px; font-size: 0.7rem; opacity: 0.5; text-transform: uppercase; }
+        #launcher {
+            position: fixed; width: 100%; height: 100%; background: #000; z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .btn-mega {
+            background: transparent; border: 1px solid #0ff; color: #0ff; padding: 20px 80px;
+            font-size: 1.5rem; cursor: pointer; transition: 0.6s; letter-spacing: 15px;
+        }
+        .btn-mega:hover { background: #0ff; color: #000; box-shadow: 0 0 100px #0ff; }
+    </style>
+</head>
+<body>
+
+    <div id="launcher">
+        <h1 style="color:#0ff; letter-spacing: 20px; margin-bottom: 40px;">GAIA_CORE_v5.1</h1>
+        <input type="file" id="track" accept="audio/*" style="color:#fff; margin-bottom: 30px;">
+        <button class="btn-mega" onclick="boot()">EJECUTAR</button>
+    </div>
+
+    <div id="ui">
+        <div class="tag">SOS_TECH // BIOMEC_CORE // ACTIVE</div>
+        <div class="tag" style="text-align: right;">GUATEMALA // NODE_01</div>
+    </div>
+
+    <canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let audio, analyser, dataArray, w, h, time = 0;
+
+function init() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+}
+
+function boot() {
+    const file = document.getElementById('track').files[0];
+    if(!file) return alert("Carga el audio para iniciar");
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    audio = new Audio(URL.createObjectURL(file));
+    const source = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    analyser.fftSize = 256;
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    document.getElementById('launcher').style.display = 'none';
+    audio.play();
+    render();
+}
+
+function drawBranch(x, y, len, angle, mid) {
+    ctx.save();
+    ctx.strokeStyle = \`hsla(\${180 + mid/3}, 100%, 70%, 0.3)\`;
+    ctx.lineWidth = len / 10;
+    ctx.translate(x, y);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -len); ctx.stroke();
+    if (len < 12) {
+        ctx.fillStyle = '#fff'; ctx.shadowBlur = 10; ctx.shadowColor = '#0ff';
+        ctx.beginPath(); ctx.arc(0, -len, 2, 0, Math.PI * 2); ctx.fill();
+        ctx.restore(); return;
+    }
+    drawBranch(0, -len, len * 0.75, angle + (mid/8), mid);
+    drawBranch(0, -len, len * 0.75, angle - (mid/8), mid);
+    ctx.restore();
+}
+
+function renderScene(bass, mid, treble) {
+    const cx = w / 2, cy = h / 2;
+
+    // 1. LOS ÁRBOLES NEURONALES (A los lados)
+    drawBranch(cx - 350, h - 100, 130 + (bass/6), 0, mid);
+    drawBranch(cx + 350, h - 100, 130 + (bass/6), 0, mid);
+
+    // 2. COLUMNA BIOMECÁNICA (Centro)
+    for(let i=0; i<40; i++) {
+        let yPos = (i - 20) * 18;
+        let angle = time + (i * 0.3);
+        let radius = 60 + (mid / 12);
+        let x1 = cx + Math.cos(angle) * radius;
+        let x2 = cx + Math.cos(angle + Math.PI) * radius;
+        let y = cy + yPos - 50;
+
+        ctx.fillStyle = \`hsla(\${180 + i*2}, 100%, 50%, 0.9)\`;
+        ctx.beginPath(); ctx.arc(x1, y, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = \`hsla(\${210 + i*2}, 100%, 60%, 0.9)\`;
+        ctx.beginPath(); ctx.arc(x2, y, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = 'rgba(0, 255, 255, 0.1)';
+        ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke();
+    }
+}
+
+function render() {
+    analyser.getByteFrequencyData(dataArray);
+    let bass = dataArray[2], mid = dataArray[40], treble = dataArray[100];
+    
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.fillRect(0, 0, w, h);
+    
+    time += 0.02 + (bass / 1200);
+
+    // Render principal
+    renderScene(bass, mid, treble);
+
+    // 3. REFLEJO LÍQUIDO (Piso)
+    ctx.save();
+    ctx.translate(0, h);
+    ctx.scale(1, -0.4); 
+    ctx.globalAlpha = 0.3;
+    renderScene(bass, mid, treble);
+    ctx.restore();
+
+    requestAnimationFrame(render);
+}
+
+window.addEventListener('resize', init);
+init();
+<\/script>
+</body>
+</html>
+    `
+},
 ]; // Este corchete cierra la lista completa. No lo muevas de aquí.
 
         // Función para renderizar tarjetas
@@ -931,6 +1073,7 @@ try {
 </body>
 
 </html>
+
 
 
 
